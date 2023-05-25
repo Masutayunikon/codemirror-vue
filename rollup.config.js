@@ -1,12 +1,19 @@
-import typescript from "rollup-plugin-ts"
-import {lezer} from "@lezer/generator/rollup"
+import typescript from "rollup-plugin-ts";
+import { lezer } from "@lezer/generator/rollup";
+import polyfillNode from "rollup-plugin-polyfill-node";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default {
   input: "src/index.ts",
-  external: id => id != "tslib" && !/^(\.?\/|\w:)/.test(id),
-  output: [
-    {file: "dist/index.cjs", format: "cjs"},
-    {dir: "./dist", format: "es"}
+  output: {
+    file: 'dist/bundle.js',
+    format: 'umd',
+    name: 'codemirror6',
+  },
+  plugins: [
+    polyfillNode(),
+    nodeResolve(),
+    lezer(),
+    typescript(),
   ],
-  plugins: [lezer(), typescript()]
-}
+};
